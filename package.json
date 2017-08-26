@@ -1,0 +1,55 @@
+{
+  "name": "richer",
+  "version": "0.2.0",
+  "description": "Shopify richcart with no jquery dep",
+  "main": "dist/richer.min.js",
+  "jsnext:main": "src/richer.js",
+  "scripts": {
+    "build": "mkdir -p dist && browserify src/richer.js --standalone richer > dist/richer.browserify.js"
+  },
+  "browserify": {
+    "debug": true,
+    "cache": {},
+    "packageCache": {},
+    "extension": [
+      "js"
+    ],
+    "transform": [
+      "babelify"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/the-couch/richer.git"
+  },
+  "keywords": [
+    "javascript",
+    "shopify",
+    "ajax",
+    "cart",
+    "es6"
+  ],
+  "author": "iamkevingreen <meetus@thecouch.nyc> (http://thecouch.nyc)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/the-couch/richer/issues"
+  },
+  "homepage": "https://github.com/the-couch/richer#readme",
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "*",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-es2015-rollup": "*",
+    "babelify": "^7.3.0",
+    "browser-sync": "*",
+    "browserify": "^13.1.0",
+    "del": "*",
+    "gulp": "*",
+    "mkdirp": "*",
+    "node-notifier": "*",
+    "rollup": "*",
+    "rollup-plugin-babel": "*",
+    "rollup-plugin-commonjs": "*",
+    "rollup-plugin-node-resolve": "*",
+    "rollup-plugin-uglify": "*"
+  }
+}
