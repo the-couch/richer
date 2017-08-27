@@ -20,7 +20,7 @@ RicherAPI.addItemFromForm = (form, callback, errorCallback) => {
     },
     body: JSON.stringify(form)
   })
-    .then( r => {
+    .then(r => {
       if ((typeof callback) === 'function') {
         callback(r.json())
       } else {
@@ -31,8 +31,8 @@ RicherAPI.addItemFromForm = (form, callback, errorCallback) => {
 
 RicherAPI.getCart = (callback) => {
   fetch('/cart.js', { credentials: 'same-origin' })
-    .then( r => r.json() )
-    .then( cart => {
+    .then(r => r.json())
+    .then(cart => {
       if ((typeof callback) === 'function') {
         callback(cart)
       } else {
@@ -51,7 +51,7 @@ const byId = (selector) => {
 
 const cleanProduct = (item, config) => {
   let img = '//cdn.shopify.com/s/assets/admin/no-image-medium-cc9732cb976dd349a0df1d39816fbcc7.gif'
-  img = item.image ? item.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', '') : img
+  img = item.image ? item.image.replace(/(\.[^.]*)$/, '_small$1').replace('http:', '') : img
 
   // Define our cart object (easier to visualize)
   return {
@@ -64,12 +64,12 @@ const cleanProduct = (item, config) => {
     itemAdd: item.quantity + 1,
     itemMinus: item.quantity - 1,
     itemQty: item.quantity,
-    price: slate.Currency.formatMoney(item.price, config.moneyFormat),
+    price: slate.Currency.formatMoney(item.price), // eslint-disable-line
     vendor: item.vendor,
-    linePrice: slate.Currency.formatMoney(item.line_price, config.moneyFormat),
-    originalLinePrice: slate.Currency.formatMoney(item.original_line_price, config.moneyFormat),
+    linePrice: slate.Currency.formatMoney(item.line_price), // eslint-disable-line
+    originalLinePrice: slate.Currency.formatMoney(item.original_line_price), // eslint-disable-line
     discounts: item.discounts,
-    discountsApplied: item.line_price === item.original_line_price ? false : true
+    discountsApplied: item.line_price === item.original_line_price ? false : true // eslint-disable-line
   }
 }
 
@@ -79,8 +79,7 @@ const Richer = (options = {}) => {
     addToCartForm: 'AddToCartForm', // id
     cartContainer: 'CartContainer', // id
     cartCounter: 'CartCounter', // id
-    items: [],
-    moneyFormat: '${{amount}}'
+    items: []
   }
 
   const config = Object.assign({}, defaults, options)
@@ -92,7 +91,9 @@ const Richer = (options = {}) => {
   }
 
   const init = (options) => {
-    dom.addToCartForm ? AddToCart() : null
+    if (dom.addToCartForm) {
+      AddToCart()
+    }
     RicherAPI.getCart(cartUpdateCallback)
   }
 
@@ -128,7 +129,6 @@ const Richer = (options = {}) => {
   }
 
   const buildCart = (cart) => {
-
     const cartContainer = dom.cartContainer
     cartContainer.innerHTML = null
 
@@ -144,9 +144,7 @@ const Richer = (options = {}) => {
       return yo`
         <div>
           ${items.map((item) => {
-
             const product = cleanProduct(item, config)
-
             return yo`
               <div>
                 <div class='f jcb'>
@@ -163,9 +161,7 @@ const Richer = (options = {}) => {
                     <div>Qty: ${product.itemQty}<div>
                   </div>
                 </div>
-                <div>
-                  <h5>Subtotal: ${slate.Currency.formatMoney(cart.total_price)}</h5>
-                </div>
+                ${subTotal(cart.total_price, cart.total_cart_discount)}
               </div>
             `
           })}
@@ -173,7 +169,17 @@ const Richer = (options = {}) => {
       `
     }
 
-    function realPrice(discountsApplied, originalLinePrice, linePrice) {
+    function subTotal (total, discount) {
+      console.log('sup')
+      const totalPrice = slate.Currency.formatMoney(total)  // eslint-disable-line
+      return yo`
+        <div>
+          <h5>Subtotal: ${totalPrice}</h5>
+        </div>
+      `
+    }
+
+    function realPrice (discountsApplied, originalLinePrice, linePrice) {
       if (discountsApplied) {
         return yo`
           <div>
