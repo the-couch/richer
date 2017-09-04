@@ -1,6 +1,6 @@
 {
   "name": "richer",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Shopify richcart with no jquery dep",
   "main": "dist/richer.min.js",
   "jsnext:main": "src/richer.js",
